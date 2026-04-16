@@ -17,6 +17,16 @@ def next_magic_num(n: int) -> int:
     if int (candiate_str) > n:
         return int(candiate_str)
     
+    new_left = str(int(left_half) + 1)
+
+    if len(new_left) > half:
+        return int("1" + "0" * (length - 1) + "1")
+    
+    if length % 2 == 0:
+        return int(new_left + new_left[::-1])
+    return int(new_left + new_left[:-1][::-1])
+
+
 def main():
     data = Path("input.txt").read_text(encoding="utf-8")
     print(data, end="")
