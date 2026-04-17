@@ -9,10 +9,9 @@ HIGH_RATE = 500
 DAY_CAP = 10_000
 DAY_MINS = 24 * 60
 
-DATE_FORMAT = "%Y-%m-%d %H:%M"
 
-def parse_datetime(s: str) -> datetime:
-    return datetime.strptime(s, DATE_FORMAT)
+def parse_dt(s: str) -> datetime:
+    return datetime.strptime(s.strip(), "%Y-%m-%d %H:%M:%S")
 
 def calculate_fee(total_mins: float, per_min: bool = False) -> int:
     if total_mins <= FREE_MINS:
@@ -45,7 +44,35 @@ def calculate_fee(total_mins: float, per_min: bool = False) -> int:
 
 def main():
     data = Path("input.txt").read_text(encoding="utf-8")
-    print(data, end="")
+    
+    results = []
+    for line in data.splitlines():
+        s = line.strip()
+        if not s or s.startswith("=") or "RENDSZAM" in s.upper():
+            continue
+
+        parts = [p.strip() for p in s.split("\t") if p.strip()]
+        if len(parts) < 3:
+            continue
+
+        plate = parts[0]
+        try:
+            entry = parse_dt(parts[1])
+            exit_ = parse_dt(parts[2])
+        except ValueError:
+            results.append(f"{plate}\tHibás dátum formátum")
+            continue
+
+        if exit_ < entry:
+            results.append(f"{plate}\tKijárat nem lehet korábbi, mint a bejárat")
+            continue
+
+        minutes = (exit_ - entry).total_seconds() / 60
+        results.append(f"{plate}\t{calculate_fee(minutes)}")
+ 
+    out = "\n".join(results)
+    print(out)
+    Path("output.txt").write_text(out + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":
