@@ -65,7 +65,7 @@ def main():
             continue
 
         minutes = (exit_ - entry).total_seconds() / 60
-        results.append(f"{plate}\t{calculate_fee(minutes)}")
+        results.append(f"{plate}\t\t{calculate_fee(minutes)}")
  
     out = "RENDSZÁM\tDÍJ\n" + "\n".join(results)
     print(out)
