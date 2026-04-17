@@ -22,10 +22,7 @@ def calculate_fee(total_mins: float, per_min: bool = False) -> int:
 
     fee = full_days * DAY_CAP
 
-    if full_days == 0:
-        billable = remaining - FREE_MINS
-    else:
-        billable = remaining
+    billable = remaining - FREE_MINS
 
     if billable <= 0:
         return fee
