@@ -1,38 +1,40 @@
 from pathlib import Path
 
-def next_magic_num(n: int) -> int:
+
+def next_magic_num(n):
     if n < 1:
         return 1
-    
+
     s = str(n)
-    length = len(s)
-    half = (length + 1) // 2
-    left_half = s[:half]
+    ln = len(s)
+    half = (ln + 1) // 2
+    left = s[:half]
 
-    if length % 2 == 0:
-        candiate_str = left_half + left_half[::-1]
+    if ln % 2 == 0:
+        candidate = left + left[::-1]
     else:
-        candiate_str = left_half + left_half[:-1][::-1]
+        candidate = left + left[:-1][::-1]
 
-    if int (candiate_str) > n:
-        return int(candiate_str)
-    
-    new_left = str(int(left_half) + 1)
+    if int(candidate) > n:
+        return int(candidate)
+
+    new_left = str(int(left) + 1)
 
     if len(new_left) > half:
-        return int("1" + "0" * (length - 1) + "1")
-    
-    if length % 2 == 0:
+        return int("1" + "0" * (ln - 1) + "1")
+
+    if ln % 2 == 0:
         return int(new_left + new_left[::-1])
     return int(new_left + new_left[:-1][::-1])
 
 
-def parse_input(data: str) -> int:
-    data = data.strip()
-    if '^' in data:
-        base, exp = data.split('^')
-        return int(base) ** int(exp)
-    return int(data)
+def parse_num(raw):
+    raw = raw.strip()
+    if "^" in raw:
+        b, e = raw.split("^", 1)
+        return int(b) ** int(e)
+    return int(raw)
+
 
 def main():
     data = Path("input.txt").read_text(encoding="utf-8")
@@ -40,12 +42,8 @@ def main():
         line = line.strip()
         if not line:
             continue
-        try:
-            n = parse_input(line)
-            print(next_magic_num(n))
-        except (ValueError, ZeroDivisionError):
-            print(f"HIBA: érvénytelen bemenet: {line}")
-        
+        n = parse_num(line)
+        print(next_magic_num(n))
 
 
 if __name__ == "__main__":
