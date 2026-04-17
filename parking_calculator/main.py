@@ -68,9 +68,9 @@ def main():
             continue
 
         minutes = (exit_ - entry).total_seconds() / 60
-        results.append(f"{plate}\t{calculate_fee(minutes)} forint")
+        results.append(f"{plate}\t{calculate_fee(minutes)}")
  
-    out = "\n".join(results)
+    out = "RENDSZÁM\tDÍJ\n" + "\n".join(results)
     print(out)
     Path("output.txt").write_text(out + "\n", encoding="utf-8")
 
