@@ -27,9 +27,25 @@ def next_magic_num(n: int) -> int:
     return int(new_left + new_left[:-1][::-1])
 
 
+def parse_input(data: str) -> int:
+    data = data.strip()
+    if '^' in data:
+        base, exp = data.split('^')
+        return int(base) ** int(exp)
+    return int(data)
+
 def main():
     data = Path("input.txt").read_text(encoding="utf-8")
-    print(data, end="")
+    for line in data.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            n = parse_input(line)
+            print(next_magic_num(n))
+        except (ValueError, ZeroDivisionError):
+            print(f"HIBA: érvénytelen bemenet: {line}")
+        
 
 
 if __name__ == "__main__":
