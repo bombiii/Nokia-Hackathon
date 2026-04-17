@@ -25,12 +25,9 @@ def main():
         line = line.strip()
         if not line:
             continue
-        try:
-            parts = [p.strip() for p in line.split(",")]
-            n, h = int(parts[0]), int(parts[1])
-            print(min_num_of_drops(n, h))
-        except (ValueError, IndexError):
-            print(f"Érvénytelen bemenet: {line}")
+        parts = [p.strip() for p in line.split(",")]
+        n, h = int(parts[0]), int(parts[1])
+        print(min_num_of_drops(n, h))
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,6 @@
 from pathlib import Path
 
-
-def next_magic_num(n):
+def next_magic_num(n: int) -> int:
     if n < 1:
         return 1
 
@@ -28,7 +27,7 @@ def next_magic_num(n):
     return int(new_left + new_left[:-1][::-1])
 
 
-def parse_num(raw):
+def parse_num(raw: str) -> int:
     raw = raw.strip()
     if "^" in raw:
         b, e = raw.split("^", 1)
