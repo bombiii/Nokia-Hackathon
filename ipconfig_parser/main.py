@@ -41,20 +41,25 @@ def parse_ipconfig(text: str):
             key = key.lower()
 
             value = value.strip()
-            value = re.sub(r"\(.*?\)", "", value).strip()
+            value = re.sub(r"\((Preferred|Deferred|Duplicate|Deprecated|Tentative)\)", "", value, flags=re.IGNORECASE).strip()
             
+            indent = len(line) - len(line.lstrip())
             if key in FIELDS:
                 field = FIELDS[key]
-            
                 if field == "dns_servers":
-                    current["dns_servers"].append(value)
+                    if value:
+                        current["dns_servers"].append(value)
+                    last_field = field
                 else:
                     current[field] = value
                     last_field = field
-        elif current is not None and last_field == "dns_servers":
-            v = line.strip()
-            if v:
-                current["dns_servers"].append(re.sub(r"\(.*?\)", "", v).strip())
+            elif last_field == "dns_servers" and indent > 20:
+                # IPv6 cim ami tartalmaz :-t, de valojaban folytatosor
+                full = line.strip()
+                if full:
+                    current["dns_servers"].append(re.sub(r"\(.*?\)", "", full).strip())
+            else:
+                last_field = None
 
 
     if current is not None:
@@ -63,10 +68,17 @@ def parse_ipconfig(text: str):
     return adapters
 
 def main():
+    results = []
     for path in sorted(Path(".").glob("*.txt")):
         text = Path(path).read_text(encoding="utf-16")
-        result = parse_ipconfig(text)
-        print(result)
+        result = {
+            "file_name": path.name,
+            "adapters": parse_ipconfig(text),
+        }
+        results.append(result)
+    out = json.dumps(results, indent=2, ensure_ascii=False)
+    print(out)
+    Path("output.json").write_text(out, encoding="utf-8")
 
 if __name__ == "__main__":
     main()
