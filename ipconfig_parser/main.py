@@ -2,9 +2,9 @@ from pathlib import Path
 import re
 import json
 
-def parse_ipconfig(text: str):
+def parse_ipconfig(text: str) -> list[dict]:
     FIELDS = {
-              "description": "description",
+      "description": "description",
       "physical address": "physical_address",
       "dhcp enabled": "dhcp_enabled",
       "ipv4 address": "ipv4_address",
@@ -54,7 +54,6 @@ def parse_ipconfig(text: str):
                     current[field] = value
                     last_field = field
             elif last_field == "dns_servers" and indent > 20:
-                # IPv6 cim ami tartalmaz :-t, de valojaban folytatosor
                 full = line.strip()
                 if full:
                     current["dns_servers"].append(re.sub(r"\(.*?\)", "", full).strip())

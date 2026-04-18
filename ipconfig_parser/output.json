@@ -1,6 +1,6 @@
 [
   {
-    "file": "parser_input_a.txt",
+    "file_name": "parser_input_a.txt",
     "adapters": [
       {
         "adapter_name": "Ethernet adapter Ethernet 2",
@@ -75,7 +75,7 @@
     ]
   },
   {
-    "file": "parser_input_b.txt",
+    "file_name": "parser_input_b.txt",
     "adapters": [
       {
         "adapter_name": "Ethernet adapter Ethernet 2",
